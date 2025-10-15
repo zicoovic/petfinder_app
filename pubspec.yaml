@@ -10,10 +10,43 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # State Management using BLoC pattern
+  flutter_bloc: ^9.1.1
+
+  # Value Equality for comparing objects in BLoC
+  equatable: ^2.0.7
+
+  # HTTP Client for API calls (The Cat API)
+  dio: ^5.9.0
+
+  # Dependency Injection for managing dependencies
+  get_it: ^8.2.0
+
+  # JSON Serialization annotations
+  json_annotation: ^4.9.0
+
+  # Responsive UI for different screen sizes
+  flutter_screenutil: ^5.9.3
+
+  # Image Caching for better performance
+  cached_network_image: ^3.4.1
+
+  # Local Storage for saving favorites
+  shared_preferences: ^2.5.3
+
+  # Navigation and routing management
+  go_router: ^16.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+  # Code Generation for JSON serialization
+  build_runner: ^2.4.6
+
+  # JSON Code Generator
+  json_serializable: ^6.11.1
 
 flutter:
   uses-material-design: true
