@@ -11,9 +11,9 @@ class PetModel extends Pet {
     super.description,
     super.temperament,
     super.origin,
-    @JsonKey(name: 'life_span') super.lifeSpan,
+    super.lifeSpan,
     super.weight,
-    @JsonKey(name: 'reference_image_id') super.imageUrl,
+    super.imageUrl,
     super.price = 100.0,
     super.distance = 2.5,
     super.gender = 'Male',
@@ -21,7 +21,27 @@ class PetModel extends Pet {
     super.isFavorite = false,
   });
 
-  factory PetModel.fromJson(Map<String, dynamic> json) =>
-      _$PetModelFromJson(json);
+  factory PetModel.fromJson(Map<String, dynamic> json) {
+    return PetModel(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      temperament: json['temperament'] as String?,
+      origin: json['origin'] as String?,
+      lifeSpan: json['life_span'] as String?,
+      weight: _weightFromJson(json['weight']),
+      imageUrl: json['reference_image_id'] as String?,
+    );
+  }
+
+  static String? _weightFromJson(dynamic json) {
+    if (json == null) return null;
+    if (json is String) return json;
+    if (json is Map) {
+      return json['metric'] as String?;
+    }
+    return null;
+  }
+
   Map<String, dynamic> toJson() => _$PetModelToJson(this);
 }
