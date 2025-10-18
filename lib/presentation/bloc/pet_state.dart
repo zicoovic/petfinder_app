@@ -17,12 +17,13 @@ class PetLoading extends PetState {
 }
 
 class PetLoaded extends PetState {
-  final List<Pet> pets;
+  final List<Pet> pets;         // Currently displayed pets (filtered or all)
+  final List<Pet>? allPets;     // All pets from API (for categories)
 
-  const PetLoaded(this.pets);
+  const PetLoaded(this.pets, {this.allPets});
 
   @override
-  List<Object?> get props => [pets];
+  List<Object?> get props => [pets, allPets];
 }
 
 class PetError extends PetState {

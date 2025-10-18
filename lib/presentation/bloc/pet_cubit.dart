@@ -23,7 +23,8 @@ class PetCubit extends Cubit<PetState> {
       final result = await getPetsUseCase();
 
       if (result is Success<List<Pet>>) {
-        emit(PetLoaded(result.data));
+        // Store all pets for filtering
+        emit(PetLoaded(result.data, allPets: result.data));
       } else if (result is Error<List<Pet>>) {
         emit(PetError(result.failure.message));
       }
@@ -64,7 +65,15 @@ class PetCubit extends Cubit<PetState> {
             return p;
           }).toList();
 
-          emit(PetLoaded(updatedPets));
+          // Also update allPets if it exists
+          final updatedAllPets = currentState.allPets?.map((p) {
+            if (p.id == pet.id) {
+              return p.copyWith(isFavorite: result.data);
+            }
+            return p;
+          }).toList();
+
+          emit(PetLoaded(updatedPets, allPets: updatedAllPets));
         }
       } else if (result is Error<bool>) {
         emit(PetError(result.failure.message));
@@ -94,6 +103,48 @@ class PetCubit extends Cubit<PetState> {
       }
     } catch (e) {
       emit(PetError('Failed to search pets: $e'));
+    }
+  }
+
+  /// Filter pets by breed name
+  /// If breed is "All", shows all pets
+  /// Otherwise, shows only pets matching that breed
+  Future<void> filterByBreed(String breed) async {
+    final currentState = state;
+
+    // Get all pets from current state or fetch from API
+    List<Pet> allPets = [];
+
+    if (currentState is PetLoaded && currentState.allPets != null) {
+      // Use cached all pets
+      allPets = currentState.allPets!;
+    } else {
+      // Fetch from API
+      emit(const PetLoading());
+      try {
+        final result = await getPetsUseCase();
+        if (result is Success<List<Pet>>) {
+          allPets = result.data;
+        } else if (result is Error<List<Pet>>) {
+          emit(PetError(result.failure.message));
+          return;
+        }
+      } catch (e) {
+        emit(PetError('Failed to filter pets: $e'));
+        return;
+      }
+    }
+
+    // Filter pets
+    if (breed == 'All') {
+      // Show all pets
+      emit(PetLoaded(allPets, allPets: allPets));
+    } else {
+      // Filter by breed
+      final filteredPets = allPets
+          .where((pet) => pet.name == breed)
+          .toList();
+      emit(PetLoaded(filteredPets, allPets: allPets));
     }
   }
 }

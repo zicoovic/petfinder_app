@@ -100,27 +100,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCategories() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.h),
-      height: 40.h,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        children: AppConstants.petCategories.map((category) {
-          return Padding(
-            padding: EdgeInsets.only(right: 12.w),
-            child: CategoryChip(
-              label: category,
-              isSelected: _selectedCategory == category,
-              onTap: () {
-                setState(() {
-                  _selectedCategory = category;
-                });
-              },
-            ),
-          );
-        }).toList(),
-      ),
+    return BlocBuilder<PetCubit, PetState>(
+      builder: (context, state) {
+        // Get unique breed names from ALL pets (not just filtered)
+        List<String> categories = ['All'];
+
+        if (state is PetLoaded && state.allPets != null && state.allPets!.isNotEmpty) {
+          // Extract unique breed names from ALL pets
+          final breeds = state.allPets!.map((pet) => pet.name).toSet().toList();
+          breeds.sort(); // Sort alphabetically
+          categories.addAll(breeds);
+        }
+
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 20.h),
+          height: 40.h,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            children: categories.map((category) {
+              return Padding(
+                padding: EdgeInsets.only(right: 12.w),
+                child: CategoryChip(
+                  label: category,
+                  isSelected: _selectedCategory == category,
+                  onTap: () {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                    // Filter pets by selected breed
+                    context.read<PetCubit>().filterByBreed(category);
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 
@@ -219,10 +235,11 @@ class _HomeScreenState extends State<HomeScreen> {
         if (index == 1) {
           // Navigate to favorites without changing local state
           await context.push(AppRoutes.favorites);
-          // When returning from favorites, reload all pets and reset nav index
+          // When returning from favorites, reload all pets and reset state
           if (mounted) {
             setState(() {
               _currentNavIndex = 0; // Reset to home
+              _selectedCategory = AppConstants.categoryAll; // Reset to "All"
             });
             context.read<PetCubit>().loadPets();
           }

@@ -481,6 +481,54 @@ If continuing this project:
 
 ---
 
-**Last Updated**: 2025-10-17
-**Status**: ✅ **ALL FEATURES COMPLETE - APP IS PRODUCTION READY!**
-**Next Action**: Add tests or new features (pull-to-refresh, category filtering, etc.)
+**Last Updated**: 2025-10-18
+**Status**: 🚧 **CORE FEATURES COMPLETE - TESTS REQUIRED FOR SUBMISSION!**
+**Next Action**:
+1. Implement breed filtering (required)
+2. Write unit tests (Cubit, UseCases, Repository)
+3. Write widget tests (UI components)
+4. Write integration tests (user flows)
+5. Create README with setup instructions
+6. Document test results
+
+---
+
+## 🆕 Recent Work (2025-10-18)
+
+### 1. Splash Screen Implementation:
+- ✅ Added `flutter_native_splash` package to dev_dependencies
+- ✅ Configured native splash screen with white background + logo
+- ✅ Generated splash assets for Android, iOS, and Web
+- ⚠️ Android 12+ enforces circular icon (platform limitation - acceptable)
+- ✅ Splash screen shows app logo instead of default Flutter logo
+
+### 2. Breed Filtering Implementation (COMPLETE! ✅):
+- ✅ Added `filterByBreed()` method to PetCubit
+- ✅ Updated PetState to track both `pets` (displayed) and `allPets` (for categories)
+- ✅ Categories now show ALL 67 cat breeds dynamically from API
+- ✅ Category chips filter pets by exact breed name
+- ✅ Fixed bug: Categories stay visible when filtering
+- ✅ Fixed bug: "All" category highlights correctly when returning from favorites
+- ✅ Filtering works without re-fetching from API (uses cached data)
+
+### Key Code Changes:
+**Files Modified:**
+- `lib/presentation/bloc/pet_state.dart` - Added `allPets` field to PetLoaded state
+- `lib/presentation/bloc/pet_cubit.dart` - Added `filterByBreed()` method
+- `lib/presentation/home/home_screen.dart` - Dynamic categories from API, filter on tap
+
+**How Filtering Works:**
+1. User sees dynamic breed chips: [All, Abyssinian, Aegean, American Bobtail, ...]
+2. Taps a breed → `filterByBreed("Abyssinian")` called
+3. Cubit filters from cached `allPets` (no API call)
+4. Only matching pets displayed
+5. All breed chips stay visible (using `allPets` for categories)
+
+### Still TODO (Assignment Requirements - CRITICAL):
+- ❌ **Unit tests for PetCubit** (loadPets, filterByBreed, searchPets, toggleFavorite)
+- ❌ **Unit tests for UseCases** (GetPets, GetFavorites, ToggleFavorite)
+- ❌ **Unit tests for Repository** (getPets, getFavorites, toggleFavorite)
+- ❌ **Widget tests** (HomeScreen, DetailsScreen, FavoriteScreen)
+- ❌ **Integration tests** (view pets → favorite → filter flow)
+- ❌ **README documentation** (setup instructions, screenshots, test results)
+- ❌ **Git workflow documentation** (explain branches, commits, PRs)
