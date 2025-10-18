@@ -42,6 +42,10 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+  # Integration Testing
+  integration_test:
+    sdk: flutter
+
   # Code Generation for JSON serialization
   build_runner: ^2.4.6
 
@@ -50,6 +54,7 @@ dev_dependencies:
 
   # Native Splash Screen Generator
   flutter_native_splash: ^2.4.3
+  mocktail: ^1.0.4
 
 flutter:
   uses-material-design: true
