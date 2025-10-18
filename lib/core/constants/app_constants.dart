@@ -4,6 +4,7 @@ class AppConstants {
 
   // API Configuration
   static const String baseUrl = 'https://api.thecatapi.com/v1';
+  static const String baseImageUrl = 'https://cdn2.thecatapi.com/images/';
   static const String apiKey =
       'live_0ZIF7Okn2Y0j4JpqhQOoX0w4L2g7Jo4odyokbxV5R0GFuCWXZq1PuYPHoHz381DO'; // Get from: https://thecatapi.com/signup
 

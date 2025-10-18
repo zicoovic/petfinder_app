@@ -22,6 +22,7 @@ class PetRepositoryImpl implements PetRepository {
       final allPets = await remoteDataSource.getPets();
       final favoritePets = allPets
           .where((pet) => favoriteIds.contains(pet.id))
+          .map((pet) => pet.copyWith(isFavorite: true))
           .toList();
 
       return Success(favoritePets);
@@ -36,7 +37,16 @@ class PetRepositoryImpl implements PetRepository {
       print('Repository: Calling remote data source...');
       final pets = await remoteDataSource.getPets();
       print('Repository: Got ${pets.length} pets');
-      return Success(pets);
+
+      // Get favorite IDs from local storage
+      final favoriteIds = await localDataSource.getFavoritePets();
+
+      // Map pets and set isFavorite flag based on local storage
+      final petsWithFavorites = pets.map((pet) {
+        return pet.copyWith(isFavorite: favoriteIds.contains(pet.id));
+      }).toList();
+
+      return Success(petsWithFavorites);
     } catch (error) {
       print('Repository Error: $error');
       return const Error(ServerFailure());
