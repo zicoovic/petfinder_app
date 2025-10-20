@@ -14,13 +14,10 @@ class PetRemoteDataSourceImpl implements PetRemoteDataSource {
 
   @override
   Future<List<PetModel>> getPets() async {
-    print('RemoteDataSource: Calling API /breeds');
     final response = await apiService.get('/breeds');
-    print('RemoteDataSource: Got response, status: ${response.statusCode}');
 
     // API returns List directly, not wrapped in object
     final List<dynamic> data = response.data as List;
-    print('RemoteDataSource: Parsing ${data.length} items');
 
     return data.map((json) => PetModel.fromJson(json)).toList();
   }

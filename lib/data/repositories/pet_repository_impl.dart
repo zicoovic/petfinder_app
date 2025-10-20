@@ -17,7 +17,7 @@ class PetRepositoryImpl implements PetRepository {
     try {
       final favoriteIds = await localDataSource.getFavoritePets();
       if (favoriteIds.isEmpty) {
-        return const  Success([]);
+        return const Success([]);
       }
       final allPets = await remoteDataSource.getPets();
       final favoritePets = allPets
@@ -34,9 +34,7 @@ class PetRepositoryImpl implements PetRepository {
   @override
   Future<Result<List<Pet>>> getPets() async {
     try {
-      print('Repository: Calling remote data source...');
       final pets = await remoteDataSource.getPets();
-      print('Repository: Got ${pets.length} pets');
 
       // Get favorite IDs from local storage
       final favoriteIds = await localDataSource.getFavoritePets();
@@ -48,7 +46,6 @@ class PetRepositoryImpl implements PetRepository {
 
       return Success(petsWithFavorites);
     } catch (error) {
-      print('Repository Error: $error');
       return const Error(ServerFailure());
     }
   }

@@ -76,8 +76,9 @@ void main() {
       // ARRANGE: Tell the mock repository to return success with test pets
       // "when" = when this method is called
       // "thenAnswer" = return this result
-      when(() => mockRepository.getPets())
-          .thenAnswer((_) async => Success(testPets));
+      when(
+        () => mockRepository.getPets(),
+      ).thenAnswer((_) async => Success(testPets));
 
       // ACT: Call the use case (this will call our mock repository)
       final result = await useCase();
@@ -107,8 +108,9 @@ void main() {
     /// ========================================================================
     test('should return ServerFailure when repository fails', () async {
       // ARRANGE: Tell the mock repository to return an error
-      when(() => mockRepository.getPets())
-          .thenAnswer((_) async => const Error(ServerFailure()));
+      when(
+        () => mockRepository.getPets(),
+      ).thenAnswer((_) async => const Error(ServerFailure()));
 
       // ACT: Call the use case
       final result = await useCase();
@@ -132,23 +134,26 @@ void main() {
     /// SCENARIO: Repository fails with a cache error
     /// EXPECTED: Use case should return Error with CacheFailure
     /// ========================================================================
-    test('should return CacheFailure when repository has cache error',
-        () async {
-      // ARRANGE: Tell the mock to return cache error
-      when(() => mockRepository.getPets())
-          .thenAnswer((_) async => const Error(CacheFailure()));
+    test(
+      'should return CacheFailure when repository has cache error',
+      () async {
+        // ARRANGE: Tell the mock to return cache error
+        when(
+          () => mockRepository.getPets(),
+        ).thenAnswer((_) async => const Error(CacheFailure()));
 
-      // ACT: Call the use case
-      final result = await useCase();
+        // ACT: Call the use case
+        final result = await useCase();
 
-      // ASSERT: Check we got a cache error
-      expect(result, isA<Error<List<Pet>>>());
-      final errorResult = result as Error<List<Pet>>;
-      expect(errorResult.failure, isA<CacheFailure>());
+        // ASSERT: Check we got a cache error
+        expect(result, isA<Error<List<Pet>>>());
+        final errorResult = result as Error<List<Pet>>;
+        expect(errorResult.failure, isA<CacheFailure>());
 
-      // Verify the repository was called
-      verify(() => mockRepository.getPets()).called(1);
-    });
+        // Verify the repository was called
+        verify(() => mockRepository.getPets()).called(1);
+      },
+    );
 
     /// ========================================================================
     /// TEST 4: Empty List Case
@@ -158,8 +163,9 @@ void main() {
     /// ========================================================================
     test('should return empty list when repository returns no pets', () async {
       // ARRANGE: Mock returns success with empty list
-      when(() => mockRepository.getPets())
-          .thenAnswer((_) async => const Success([]));
+      when(
+        () => mockRepository.getPets(),
+      ).thenAnswer((_) async => const Success([]));
 
       // ACT: Call the use case
       final result = await useCase();
@@ -201,7 +207,7 @@ void main() {
 ///
 /// 5. EXPECT (Assertions):
 ///    - expect(actual, matcher) = check if actual matches expected
-///    - isA<Type>() = checks if value is of certain type
+///    - isA`<Type>`() = checks if value is of certain type
 ///    - equals() = checks if values are equal
 ///    - isEmpty = checks if list is empty
 ///
