@@ -20,7 +20,7 @@ import 'package:petfinder_app/core/error/failures.dart';
 ///
 /// KEY DIFFERENCE:
 /// - This use case takes a PARAMETER (the Pet to toggle)
-/// - Returns Result<bool> instead of Result<List<Pet>>
+/// - Returns Result<bool> instead of Result<List`<Pet>`>
 /// - true = now favorited, false = now unfavorited
 ///
 /// TESTING STRATEGY:
@@ -73,8 +73,9 @@ void main() {
     /// ========================================================================
     test('should add pet to favorites when pet is not favorited', () async {
       // ARRANGE: Mock returns true (now favorited)
-      when(() => mockRepository.toggleFavorite(unfavoritedPet))
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.toggleFavorite(unfavoritedPet),
+      ).thenAnswer((_) async => const Success(true));
 
       // ACT: Toggle favorite on unfavorited pet
       final result = await useCase(unfavoritedPet);
@@ -98,25 +99,28 @@ void main() {
     /// SCENARIO: User clicks heart on already favorited pet
     /// EXPECTED: Pet gets removed from favorites, returns false
     /// ========================================================================
-    test('should remove pet from favorites when pet is already favorited',
-        () async {
-      // ARRANGE: Mock returns false (now unfavorited)
-      when(() => mockRepository.toggleFavorite(favoritedPet))
-          .thenAnswer((_) async => const Success(false));
+    test(
+      'should remove pet from favorites when pet is already favorited',
+      () async {
+        // ARRANGE: Mock returns false (now unfavorited)
+        when(
+          () => mockRepository.toggleFavorite(favoritedPet),
+        ).thenAnswer((_) async => const Success(false));
 
-      // ACT: Toggle favorite on favorited pet
-      final result = await useCase(favoritedPet);
+        // ACT: Toggle favorite on favorited pet
+        final result = await useCase(favoritedPet);
 
-      // ASSERT: Check result
-      expect(result, isA<Success<bool>>());
-      final successResult = result as Success<bool>;
+        // ASSERT: Check result
+        expect(result, isA<Success<bool>>());
+        final successResult = result as Success<bool>;
 
-      // Should return false (now unfavorited)
-      expect(successResult.data, false);
+        // Should return false (now unfavorited)
+        expect(successResult.data, false);
 
-      // Verify repository was called with correct pet
-      verify(() => mockRepository.toggleFavorite(favoritedPet)).called(1);
-    });
+        // Verify repository was called with correct pet
+        verify(() => mockRepository.toggleFavorite(favoritedPet)).called(1);
+      },
+    );
 
     /// ========================================================================
     /// TEST 3: Cache Error - Storage fails
@@ -126,8 +130,9 @@ void main() {
     /// ========================================================================
     test('should return CacheFailure when storage fails', () async {
       // ARRANGE: Mock returns cache error
-      when(() => mockRepository.toggleFavorite(unfavoritedPet))
-          .thenAnswer((_) async => const Error(CacheFailure()));
+      when(
+        () => mockRepository.toggleFavorite(unfavoritedPet),
+      ).thenAnswer((_) async => const Error(CacheFailure()));
 
       // ACT: Try to toggle favorite
       final result = await useCase(unfavoritedPet);
@@ -149,8 +154,9 @@ void main() {
     /// ========================================================================
     test('should handle multiple toggles correctly', () async {
       // ARRANGE: First toggle - add to favorites
-      when(() => mockRepository.toggleFavorite(unfavoritedPet))
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.toggleFavorite(unfavoritedPet),
+      ).thenAnswer((_) async => const Success(true));
 
       // ACT 1: First toggle (add)
       final result1 = await useCase(unfavoritedPet);
@@ -160,8 +166,9 @@ void main() {
       expect((result1 as Success<bool>).data, true);
 
       // ARRANGE: Second toggle - remove from favorites
-      when(() => mockRepository.toggleFavorite(favoritedPet))
-          .thenAnswer((_) async => const Success(false));
+      when(
+        () => mockRepository.toggleFavorite(favoritedPet),
+      ).thenAnswer((_) async => const Success(false));
 
       // ACT 2: Second toggle (remove)
       final result2 = await useCase(favoritedPet);
@@ -171,8 +178,9 @@ void main() {
       expect((result2 as Success<bool>).data, false);
 
       // ARRANGE: Third toggle - add again
-      when(() => mockRepository.toggleFavorite(unfavoritedPet))
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.toggleFavorite(unfavoritedPet),
+      ).thenAnswer((_) async => const Success(true));
 
       // ACT 3: Third toggle (add again)
       final result3 = await useCase(unfavoritedPet);
@@ -203,15 +211,17 @@ void main() {
       );
 
       // Mock the toggle
-      when(() => mockRepository.toggleFavorite(testPet))
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockRepository.toggleFavorite(testPet),
+      ).thenAnswer((_) async => const Success(true));
 
       // ACT: Toggle this specific pet
       await useCase(testPet);
 
       // ASSERT: Verify repository received the EXACT pet
-      final captured =
-          verify(() => mockRepository.toggleFavorite(captureAny())).captured;
+      final captured = verify(
+        () => mockRepository.toggleFavorite(captureAny()),
+      ).captured;
 
       // Check the captured pet matches our test pet
       expect(captured.length, 1); // Only called once
@@ -237,7 +247,7 @@ void main() {
 ///    - Multiple toggles ensure consistency
 ///
 /// 3. BOOLEAN RESULTS:
-///    - Returns Result<bool> not Result<List<Pet>>
+///    - Returns Result<bool> not Result<List`<Pet>`>
 ///    - true = now favorited
 ///    - false = now unfavorited
 ///

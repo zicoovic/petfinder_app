@@ -16,7 +16,7 @@ import 'package:petfinder_app/core/error/failures.dart';
 /// KEY DIFFERENCE FROM GetPets:
 /// - GetPets fetches from API (remote)
 /// - GetFavorites fetches from SharedPreferences (local storage)
-/// - Both return List<Pet>, but favorites are stored on the device
+/// - Both return List`<Pet>`, but favorites are stored on the device
 ///
 /// TESTING STRATEGY:
 /// - Test successful retrieval of favorites
@@ -58,32 +58,35 @@ void main() {
     /// ========================================================================
     /// TEST 1: Success - User has favorites
     /// ========================================================================
-    test('should return list of favorite pets when repository succeeds',
-        () async {
-      // ARRANGE: Mock returns favorite pets
-      when(() => mockRepository.getFavoritePets())
-          .thenAnswer((_) async => Success(favoritePets));
+    test(
+      'should return list of favorite pets when repository succeeds',
+      () async {
+        // ARRANGE: Mock returns favorite pets
+        when(
+          () => mockRepository.getFavoritePets(),
+        ).thenAnswer((_) async => Success(favoritePets));
 
-      // ACT: Call the use case
-      final result = await useCase();
+        // ACT: Call the use case
+        final result = await useCase();
 
-      // ASSERT: Check results
-      expect(result, isA<Success<List<Pet>>>());
-      final successResult = result as Success<List<Pet>>;
+        // ASSERT: Check results
+        expect(result, isA<Success<List<Pet>>>());
+        final successResult = result as Success<List<Pet>>;
 
-      // Verify we got 2 favorite pets
-      expect(successResult.data.length, 2);
+        // Verify we got 2 favorite pets
+        expect(successResult.data.length, 2);
 
-      // Verify all returned pets are favorites
-      expect(successResult.data.every((pet) => pet.isFavorite), true);
+        // Verify all returned pets are favorites
+        expect(successResult.data.every((pet) => pet.isFavorite), true);
 
-      // Verify the first favorite pet
-      expect(successResult.data.first.name, 'Abyssinian');
-      expect(successResult.data.first.isFavorite, true);
+        // Verify the first favorite pet
+        expect(successResult.data.first.name, 'Abyssinian');
+        expect(successResult.data.first.isFavorite, true);
 
-      // Verify repository was called
-      verify(() => mockRepository.getFavoritePets()).called(1);
-    });
+        // Verify repository was called
+        verify(() => mockRepository.getFavoritePets()).called(1);
+      },
+    );
 
     /// ========================================================================
     /// TEST 2: Success - Empty favorites (new user)
@@ -93,8 +96,9 @@ void main() {
     /// ========================================================================
     test('should return empty list when user has no favorites', () async {
       // ARRANGE: Mock returns empty list
-      when(() => mockRepository.getFavoritePets())
-          .thenAnswer((_) async => const Success([]));
+      when(
+        () => mockRepository.getFavoritePets(),
+      ).thenAnswer((_) async => const Success([]));
 
       // ACT: Call the use case
       final result = await useCase();
@@ -119,8 +123,9 @@ void main() {
     /// ========================================================================
     test('should return CacheFailure when storage fails', () async {
       // ARRANGE: Mock returns cache error
-      when(() => mockRepository.getFavoritePets())
-          .thenAnswer((_) async => const Error(CacheFailure()));
+      when(
+        () => mockRepository.getFavoritePets(),
+      ).thenAnswer((_) async => const Error(CacheFailure()));
 
       // ACT: Call the use case
       final result = await useCase();
@@ -160,8 +165,9 @@ void main() {
       ];
 
       // Mock returns only favorite pets
-      when(() => mockRepository.getFavoritePets())
-          .thenAnswer((_) async => Success(mixedPets));
+      when(
+        () => mockRepository.getFavoritePets(),
+      ).thenAnswer((_) async => Success(mixedPets));
 
       // ACT: Call the use case
       final result = await useCase();
