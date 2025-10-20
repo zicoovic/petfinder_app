@@ -20,7 +20,7 @@ import 'package:petfinder_app/core/error/failures.dart';
 ///
 /// KEY DIFFERENCE:
 /// - This use case takes a PARAMETER (the Pet to toggle)
-/// - Returns Result`<bool>` instead of Result<List`<Pet>`>`
+/// - Returns Result`<bool` instead of Result<List`<Pet`>`
 /// - true = now favorited, false = now unfavorited
 ///
 /// TESTING STRATEGY:
