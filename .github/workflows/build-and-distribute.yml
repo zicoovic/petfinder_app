@@ -64,7 +64,7 @@ jobs:
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
       uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
       with:
-        appId: ${{ secrets.FIREBASE_APP_ID }}
+        appId: 1:977811551855:android:8897af1ee365c44c037f9a
         serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         groups: testers
         file: build/app/outputs/flutter-apk/app-release.apk
