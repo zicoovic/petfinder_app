@@ -44,6 +44,22 @@ jobs:
         path: build/app/outputs/flutter-apk/app-release.apk
         retention-days: 30
 
+    - name: Debug - Check if secrets exist
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+      run: |
+        if [ -z "${{ secrets.FIREBASE_APP_ID }}" ]; then
+          echo "❌ FIREBASE_APP_ID is not set!"
+          exit 1
+        else
+          echo "✅ FIREBASE_APP_ID is set"
+        fi
+        if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ]; then
+          echo "❌ FIREBASE_SERVICE_ACCOUNT is not set!"
+          exit 1
+        else
+          echo "✅ FIREBASE_SERVICE_ACCOUNT is set"
+        fi
+
     - name: Distribute to Firebase App Distribution
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
       uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
