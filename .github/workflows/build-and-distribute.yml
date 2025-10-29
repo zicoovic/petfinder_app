@@ -44,41 +44,30 @@ jobs:
         path: build/app/outputs/flutter-apk/app-release.apk
         retention-days: 30
 
-    - name: Debug - Check if secrets exist
+    - name: Setup Node.js
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install Firebase CLI
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+      run: npm install -g firebase-tools
+
+    - name: Authenticate with Firebase
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
       run: |
-        if [ -z "${{ secrets.FIREBASE_APP_ID }}" ]; then
-          echo "❌ FIREBASE_APP_ID is not set!"
-          exit 1
-        else
-          echo "✅ FIREBASE_APP_ID is set"
-        fi
-        if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ]; then
-          echo "❌ FIREBASE_SERVICE_ACCOUNT is not set!"
-          exit 1
-        else
-          echo "✅ FIREBASE_SERVICE_ACCOUNT is set"
-        fi
+        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud-service-key.json
+        export GOOGLE_APPLICATION_CREDENTIALS="$HOME/gcloud-service-key.json"
+        firebase --version
 
     - name: Distribute to Firebase App Distribution
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-      uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
-      with:
-        appId: 1:977811551855:android:8897af1ee365c44c037f9a
-        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        groups: testers
-        file: build/app/outputs/flutter-apk/app-release.apk
-        releaseNotes: |
-          🎉 New Build from ${{ github.ref_name }} branch
-
-          📝 Commit: ${{ github.event.head_commit.message }}
-          👤 Author: ${{ github.event.head_commit.author.name }}
-
-          ✨ Features in this build:
-          - Pet adoption system with adopt/unadopt functionality
-          - Full dark/light theme support with toggle button
-          - Performance optimizations (60 FPS, 21% less memory)
-          - Fixed navigation issues
-          - Updated UI and user experience
-
-          🐛 Please test and report any issues!
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-service-key.json
+      run: |
+        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > gcloud-service-key.json
+        firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+          --app 1:977811551855:android:8897af1ee365c44c037f9a \
+          --groups "testers" \
+          --release-notes "New build from ${{ github.ref_name }} - ${{ github.event.head_commit.message }}"
