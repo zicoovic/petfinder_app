@@ -64,6 +64,25 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:977811551855:android:8897af1ee365c44c037f9a",
+        "android_client_info": {
+          "package_name": "com.example.petfinder_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLXnSc36_tAQU1oVcxUNV1SHWCeHz9aMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:977811551855:android:f92842d73859dae0037f9a",
         "android_client_info": {
           "package_name": "com.example.petfinder_app.dev"
