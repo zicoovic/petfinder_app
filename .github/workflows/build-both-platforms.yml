@@ -1,0 +1,92 @@
+name: Build and Distribute (Android + iOS)
+
+on:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  # Android Build (Works on any OS)
+  build-android:
+    name: Build and Distribute Android
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.35.6'
+        channel: 'stable'
+        cache: true
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Run tests
+      run: flutter test
+
+    - name: Build APK
+      run: flutter build apk --release
+
+    - name: Upload APK to Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+
+    - name: Distribute to Firebase (Android)
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
+      with:
+        appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        groups: testers
+        file: build/app/outputs/flutter-apk/app-release.apk
+        releaseNotes: |
+          🤖 Android Build from ${{ github.ref_name }}
+
+          📝 ${{ github.event.head_commit.message }}
+          👤 ${{ github.event.head_commit.author.name }}
+
+  # iOS Build (Requires macOS)
+  build-ios:
+    name: Build and Distribute iOS
+    runs-on: macos-latest  # ← Runs on Mac (costs money on private repos)
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.35.6'
+        channel: 'stable'
+        cache: true
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Run tests
+      run: flutter test
+
+    - name: Build iOS (no codesign)
+      run: flutter build ios --release --no-codesign
+
+    # Note: Actual IPA creation requires certificates
+    # This is just a placeholder - you'd need full setup
+
+    - name: Note about iOS
+      run: |
+        echo "iOS build completed (no codesign)"
+        echo "To distribute iOS:"
+        echo "1. You need Apple Developer Account ($99/year)"
+        echo "2. You need certificates and provisioning profiles"
+        echo "3. You need to setup code signing"
