@@ -90,4 +90,33 @@ class PetRepositoryImpl implements PetRepository {
       return const Error(CacheFailure());
     }
   }
+
+  @override
+  Future<void> adoptPet(String petId) async {
+    await localDataSource.adoptPet(petId);
+  }
+
+  @override
+  Future<Result<List<Pet>>> getAdoptedPets() async {
+    try {
+      final adoptedIds = await localDataSource.getAdoptedPets();
+      if (adoptedIds.isEmpty) {
+        return const Success([]);
+      }
+      final allPets = await remoteDataSource.getPets();
+      final adoptedPets = allPets
+          .where((pet) => adoptedIds.contains(pet.id))
+          .map((pet) => pet.copyWith(isAdopted: true))
+          .toList();
+
+      return Success(adoptedPets);
+    } catch (_) {
+      return const Error(ServerFailure());
+    }
+  }
+
+  @override
+  Future<void> unAdoptPet(String petId) async {
+    await localDataSource.unAdoptPet(petId);
+  }
 }

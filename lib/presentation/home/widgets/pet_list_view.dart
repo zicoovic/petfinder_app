@@ -21,10 +21,10 @@ class PetListView extends StatelessWidget {
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         } else if (state is PetError) {
-          return _buildError(state.message);
+          return _buildError(context, state.message);
         } else if (state is PetLoaded) {
           if (state.pets.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
           return ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -46,27 +46,27 @@ class PetListView extends StatelessWidget {
     );
   }
 
-  Widget _buildError(String message) {
+  Widget _buildError(BuildContext context, String message) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.error_outline, size: 64.sp, color: AppColors.error),
           SizedBox(height: 16.h),
-          Text(message, style: AppTextStyles.bodyMedium),
+          Text(message, style: AppTextStyles.bodyMedium(context)),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.pets, size: 64.sp, color: AppColors.textLight),
           SizedBox(height: 16.h),
-          Text('No pets found', style: AppTextStyles.bodyMedium),
+          Text('No pets found', style: AppTextStyles.bodyMedium(context)),
         ],
       ),
     );

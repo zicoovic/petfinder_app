@@ -13,7 +13,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -21,19 +21,19 @@ class OnboardingScreen extends StatelessWidget {
             children: [
               const Spacer(flex: 2),
               // Pet Image
-              _buildImage(),
+              _buildImage(context),
               const Spacer(flex: 1),
               // Title
               Text(
                 'Find Your Best\nCompanion With Us',
-                style: AppTextStyles.heading1,
+                style: AppTextStyles.heading1(context),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16.h),
               // Subtitle
               Text(
                 'Join & discover the best suitable pets as\nper your preferences in your location',
-                style: AppTextStyles.bodyMedium,
+                style: AppTextStyles.bodyMedium(context),
                 textAlign: TextAlign.center,
               ),
               const Spacer(flex: 2),
@@ -41,7 +41,7 @@ class OnboardingScreen extends StatelessWidget {
               CustomButton(
                 text: 'Get started',
                 onPressed: () => context.go(AppRoutes.home),
-                icon: Icon(Icons.pets, color: AppColors.white, size: 20.sp),
+                icon: Icon(Icons.pets, color: Theme.of(context).cardColor, size: 20.sp),
               ),
               SizedBox(height: 32.h),
             ],
@@ -51,12 +51,12 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     return Container(
       width: 280.w,
       height: 280.h,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Center(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_colors.dart';
 
 /// Custom search bar widget
 class SearchBarWidget extends StatelessWidget {
@@ -22,7 +21,7 @@ class SearchBarWidget extends StatelessWidget {
     return Container(
       height: 50.h,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
@@ -31,7 +30,7 @@ class SearchBarWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Icon(
               Icons.search,
-              color: AppColors.textLight,
+              color: Theme.of(context).iconTheme.color,
               size: 24.sp,
             ),
           ),
@@ -43,7 +42,7 @@ class SearchBarWidget extends StatelessWidget {
                 hintText: hintText,
                 hintStyle: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.textLight,
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -57,7 +56,7 @@ class SearchBarWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Icon(
                   Icons.tune,
-                  color: AppColors.textPrimary,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   size: 24.sp,
                 ),
               ),

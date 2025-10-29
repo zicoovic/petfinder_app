@@ -30,10 +30,12 @@ class CategoryList extends StatelessWidget {
         return Container(
           margin: EdgeInsets.symmetric(vertical: 20.h),
           height: 40.h,
-          child: ListView(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-            children: categories.map((category) {
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final category = categories[index];
               return Padding(
                 padding: EdgeInsets.only(right: 12.w),
                 child: CategoryChip(
@@ -45,7 +47,7 @@ class CategoryList extends StatelessWidget {
                   },
                 ),
               );
-            }).toList(),
+            },
           ),
         );
       },

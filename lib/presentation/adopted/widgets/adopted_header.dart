@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../bloc/pet_cubit.dart';
 
-class FavoriteHeader extends StatelessWidget {
-  const FavoriteHeader({super.key});
+class AdoptedHeader extends StatelessWidget {
+  const AdoptedHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class FavoriteHeader extends StatelessWidget {
             child: Icon(
               Icons.arrow_back_ios_new,
               size: 24.sp,
-              color: Theme.of(context).iconTheme.color,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           SizedBox(width: 12.w),
           Text(
-            'Your Favorite Pets',
+            'Your Adopted Pets',
             style: AppTextStyles.heading2(context),
           ),
         ],

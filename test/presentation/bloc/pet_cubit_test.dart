@@ -6,13 +6,24 @@ import 'package:petfinder_app/core/repositories/pet_repository.dart';
 import 'package:petfinder_app/core/usecases/get_favorites.dart';
 import 'package:petfinder_app/core/usecases/get_pets.dart';
 import 'package:petfinder_app/core/usecases/toggle_favorite.dart';
+import 'package:petfinder_app/core/usecases/adopt_pet.dart';
+import 'package:petfinder_app/core/usecases/get_adopted_pets.dart';
+import 'package:petfinder_app/core/usecases/unadopt_pet.dart';
 import 'package:petfinder_app/presentation/bloc/pet_cubit.dart';
 import 'package:petfinder_app/presentation/bloc/pet_state.dart';
 
 // Mock classes - Fake versions of real classes for testing
 class MockGetPets extends Mock implements GetPets {}
+
 class MockGetFavorites extends Mock implements GetFavorites {}
+
 class MockToggleFavorite extends Mock implements ToggleFavorite {}
+
+class MockAdoptPet extends Mock implements AdoptPet {}
+
+class MockGetAdoptedPets extends Mock implements GetAdoptedPets {}
+
+class MockUnAdoptPet extends Mock implements UnAdoptPet {}
 
 void main() {
   // Test setup - runs before each test
@@ -20,6 +31,9 @@ void main() {
   late MockGetPets mockGetPets;
   late MockGetFavorites mockGetFavorites;
   late MockToggleFavorite mockToggleFavorite;
+  late MockAdoptPet mockAdoptPet;
+  late MockGetAdoptedPets mockGetAdoptedPets;
+  late MockUnAdoptPet mockUnAdoptPet;
 
   // Sample test data
   final testPets = [
@@ -44,12 +58,18 @@ void main() {
     mockGetPets = MockGetPets();
     mockGetFavorites = MockGetFavorites();
     mockToggleFavorite = MockToggleFavorite();
+    mockAdoptPet = MockAdoptPet();
+    mockGetAdoptedPets = MockGetAdoptedPets();
+    mockUnAdoptPet = MockUnAdoptPet();
 
     // Create cubit with mocks
     cubit = PetCubit(
       getPetsUseCase: mockGetPets,
       getFavoritesUseCase: mockGetFavorites,
       toggleFavoriteUseCase: mockToggleFavorite,
+      adoptPetUseCase: mockAdoptPet,
+      getAdoptedPetsUseCase: mockGetAdoptedPets,
+      unAdoptPetUseCase: mockUnAdoptPet,
     );
   });
 
@@ -81,9 +101,9 @@ void main() {
 
     test('loadPets emits PetError when fails', () async {
       // ARRANGE: Setup mock to return error
-      when(() => mockGetPets()).thenAnswer(
-        (_) async => const Error(ServerFailure()),
-      );
+      when(
+        () => mockGetPets(),
+      ).thenAnswer((_) async => const Error(ServerFailure()));
 
       // ACT
       await cubit.loadPets();
@@ -161,8 +181,9 @@ void main() {
       final petToToggle = testPets.first;
 
       // Mock toggle favorite to return true (favorited)
-      when(() => mockToggleFavorite(petToToggle))
-          .thenAnswer((_) async => const Success(true));
+      when(
+        () => mockToggleFavorite(petToToggle),
+      ).thenAnswer((_) async => const Success(true));
 
       // ACT: Toggle favorite
       await cubit.toggleFavoriteStatus(petToToggle);

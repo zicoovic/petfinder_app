@@ -33,7 +33,7 @@ class CustomButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColors.primary,
-          foregroundColor: textColor ?? AppColors.white,
+          foregroundColor: textColor ?? Theme.of(context).cardColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28.r),
@@ -43,8 +43,8 @@ class CustomButton extends StatelessWidget {
             ? SizedBox(
                 height: 24.h,
                 width: 24.w,
-                child: const CircularProgressIndicator(
-                  color: AppColors.white,
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).cardColor,
                   strokeWidth: 2,
                 ),
               )
@@ -57,7 +57,7 @@ class CustomButton extends StatelessWidget {
                   ],
                   Text(
                     text,
-                    style: AppTextStyles.button,
+                    style: AppTextStyles.button(context),
                   ),
                 ],
               ),

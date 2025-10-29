@@ -33,6 +33,15 @@ abstract class PetRepository {
   /// Check if pet is favorite
   Future<Result<bool>> isFavorite(String petId);
 
+  /// Get adopted pets from local storage
+  Future<Result<List<Pet>>> getAdoptedPets();
+
+  /// Adopt a pet
+  Future<void> adoptPet(String petId);
+
+  /// unAdopt a pet
+  Future<void> unAdoptPet(String petId);
+
   /// Search pets by name or breed
   Future<Result<List<Pet>>> searchPets(String query);
 }

@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petfinder_app/core/usecases/adopt_pet.dart';
+import 'package:petfinder_app/core/usecases/get_adopted_pets.dart';
+import 'package:petfinder_app/core/usecases/unadopt_pet.dart';
 import '../../core/repositories/pet_repository.dart';
 import '../../core/usecases/get_favorites.dart';
 import '../../core/usecases/get_pets.dart';
@@ -10,11 +13,17 @@ class PetCubit extends Cubit<PetState> {
   final GetPets getPetsUseCase;
   final GetFavorites getFavoritesUseCase;
   final ToggleFavorite toggleFavoriteUseCase;
+  final GetAdoptedPets getAdoptedPetsUseCase;
+  final AdoptPet adoptPetUseCase;
+  final UnAdoptPet unAdoptPetUseCase;
 
   PetCubit({
     required this.getPetsUseCase,
     required this.getFavoritesUseCase,
     required this.toggleFavoriteUseCase,
+    required this.getAdoptedPetsUseCase,
+    required this.adoptPetUseCase,
+    required this.unAdoptPetUseCase,
   }) : super(const PetInitial());
 
   Future<void> loadPets() async {
@@ -45,6 +54,46 @@ class PetCubit extends Cubit<PetState> {
       }
     } catch (e) {
       emit(PetError('Failed to load favorites: $e'));
+    }
+  }
+
+  Future<void> loadAdoptedPets() async {
+    emit(const PetLoading());
+    try {
+      final result = await getAdoptedPetsUseCase();
+
+      if (result is Success<List<Pet>>) {
+        emit(PetLoaded(result.data));
+      } else if (result is Error<List<Pet>>) {
+        emit(PetError(result.failure.message));
+      }
+    } catch (e) {
+      emit(PetError('Failed to load adopted pets: $e'));
+    }
+  }
+
+  Future<void> adoptPet(Pet pet) async {
+    try {
+      await adoptPetUseCase(pet.id);
+    } catch (e) {
+      emit(PetError('Failed to adopt pet: $e'));
+    }
+  }
+
+  Future<void> unAdoptPet(Pet pet) async {
+    try {
+      await unAdoptPetUseCase(pet.id);
+
+      // Refresh the adopted pets list to remove the unadopted pet
+      final currentState = state;
+      if (currentState is PetLoaded) {
+        final updatedPets = currentState.pets
+            .where((p) => p.id != pet.id)
+            .toList();
+        emit(PetLoaded(updatedPets));
+      }
+    } catch (e) {
+      emit(PetError('Failed to unadopt pet: $e'));
     }
   }
 
@@ -95,7 +144,9 @@ class PetCubit extends Cubit<PetState> {
 
       if (result is Success<List<Pet>>) {
         final filteredPets = result.data
-            .where((pet) => pet.name.toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (pet) => pet.name.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
         emit(PetLoaded(filteredPets));
       } else if (result is Error<List<Pet>>) {
@@ -141,9 +192,7 @@ class PetCubit extends Cubit<PetState> {
       emit(PetLoaded(allPets, allPets: allPets));
     } else {
       // Filter by breed
-      final filteredPets = allPets
-          .where((pet) => pet.name == breed)
-          .toList();
+      final filteredPets = allPets.where((pet) => pet.name == breed).toList();
       emit(PetLoaded(filteredPets, allPets: allPets));
     }
   }

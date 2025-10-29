@@ -22,13 +22,13 @@ class DetailsHeader extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(8.w),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Icon(
                 Icons.arrow_back_ios_new,
                 size: 20.sp,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
           ),
@@ -43,7 +43,7 @@ class DetailsHeader extends StatelessWidget {
               child: Icon(
                 pet.isFavorite ? Icons.favorite : Icons.favorite_border,
                 size: 24.sp,
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
               ),
             ),
           ),

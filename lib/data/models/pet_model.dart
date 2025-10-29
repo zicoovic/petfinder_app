@@ -19,6 +19,7 @@ class PetModel extends Pet {
     super.gender = 'Male',
     super.age = '1 Year',
     super.isFavorite = false,
+    super.isAdopted = false,
   });
 
   factory PetModel.fromJson(Map<String, dynamic> json) {

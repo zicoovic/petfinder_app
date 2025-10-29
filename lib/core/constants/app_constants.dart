@@ -37,6 +37,7 @@ class AppConstants {
 
   // Shared Preferences Keys
   static const String favoritesKey = 'favorites_pets';
+  static const String adoptedKey = 'adopted_pets';
   static const String hasSeenOnboardingKey = 'has_seen_onboarding';
 
   // UI Constants

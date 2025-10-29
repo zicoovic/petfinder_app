@@ -4,6 +4,7 @@ import '../../presentation/onboarding/onboarding_screen.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/details/details_screen.dart';
 import '../../presentation/favourite/favourite_screen.dart';
+import '../../presentation/adopted/adopted_screen.dart';
 import '../../core/entities/pet.dart';
 import 'app_routes.dart';
 
@@ -43,6 +44,13 @@ class RouteGenerationConfig {
         name: 'favorites',
         pageBuilder: (context, state) => MaterialPage(
           child: const FavoriteScreen(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.adopted,
+        name: 'adopted',
+        pageBuilder: (context, state) => MaterialPage(
+          child: const AdoptedScreen(),
         ),
       ),
     ],

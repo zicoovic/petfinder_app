@@ -9,23 +9,23 @@ import '../../bloc/pet_cubit.dart';
 import '../../bloc/pet_state.dart';
 import '../../widgets/pet_card_grid.dart';
 
-class FavoritesGridView extends StatelessWidget {
-  const FavoritesGridView({super.key});
+class AdoptedGridView extends StatelessWidget {
+  const AdoptedGridView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PetCubit, PetState>(
       builder: (context, state) {
         if (state is PetLoading) {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
         } else if (state is PetError) {
           return _buildError(context, state.message);
         } else if (state is PetLoaded) {
-          final favorites = state.pets.where((pet) => pet.isFavorite).toList();
+          final adoptedPets = state.pets.where((pet) => pet.isAdopted).toList();
 
-          if (favorites.isEmpty) {
+          if (adoptedPets.isEmpty) {
             return _buildEmptyState(context);
           }
 
@@ -37,9 +37,9 @@ class FavoritesGridView extends StatelessWidget {
               mainAxisSpacing: 16.h,
               childAspectRatio: 0.75,
             ),
-            itemCount: favorites.length,
+            itemCount: adoptedPets.length,
             itemBuilder: (context, index) {
-              final pet = favorites[index];
+              final pet = adoptedPets[index];
               return PetCardGrid(
                 pet: pet,
                 onTap: () => context.push(AppRoutes.details, extra: pet),
@@ -74,15 +74,15 @@ class FavoritesGridView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.favorite_border,
+            Icons.volunteer_activism,
             size: 80.sp,
-            color: AppColors.textLight,
+            color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           SizedBox(height: 16.h),
-          Text('No Favorites Yet', style: AppTextStyles.heading3(context)),
+          Text('No Adopted Pets Yet', style: AppTextStyles.heading3(context)),
           SizedBox(height: 8.h),
           Text(
-            'Start adding pets to your favorites!',
+            'Start adopting pets to see them here!',
             style: AppTextStyles.bodyMedium(context),
             textAlign: TextAlign.center,
           ),

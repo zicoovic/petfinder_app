@@ -14,9 +14,13 @@ import '../repositories/pet_repository.dart';
 import '../usecases/get_pets.dart';
 import '../usecases/get_favorites.dart';
 import '../usecases/toggle_favorite.dart';
+import '../usecases/adopt_pet.dart';
+import '../usecases/get_adopted_pets.dart';
+import '../usecases/unadopt_pet.dart';
 
 // BLoC
 import '../../presentation/bloc/pet_cubit.dart';
+import '../theme/theme_cubit.dart';
 
 final injectionContainer = GetIt.instance;
 
@@ -27,13 +31,26 @@ Future<void> init() async {
       getPetsUseCase: injectionContainer(),
       getFavoritesUseCase: injectionContainer(),
       toggleFavoriteUseCase: injectionContainer(),
+      adoptPetUseCase: injectionContainer(),
+      getAdoptedPetsUseCase: injectionContainer(),
+      unAdoptPetUseCase: injectionContainer(),
     ),
+  );
+
+  // Theme Cubit
+  injectionContainer.registerLazySingleton(
+    () => ThemeCubit(pref: injectionContainer()),
   );
 
   // Use Cases
   injectionContainer.registerFactory(() => GetPets(injectionContainer()));
   injectionContainer.registerFactory(() => GetFavorites(injectionContainer()));
-  injectionContainer.registerFactory(() => ToggleFavorite(injectionContainer()));
+  injectionContainer.registerFactory(
+    () => ToggleFavorite(injectionContainer()),
+  );
+  injectionContainer.registerFactory(() => AdoptPet(injectionContainer()));
+  injectionContainer.registerFactory(() => GetAdoptedPets(injectionContainer()));
+  injectionContainer.registerFactory(() => UnAdoptPet(injectionContainer()));
 
   // Repository
   injectionContainer.registerLazySingleton<PetRepository>(

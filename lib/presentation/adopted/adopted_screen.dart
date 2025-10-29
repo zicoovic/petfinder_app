@@ -5,25 +5,25 @@ import '../../core/constants/app_constants.dart';
 import '../bloc/pet_cubit.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/bottom_nav_bar.dart';
-import 'widgets/favorite_header.dart';
-import 'widgets/favorites_grid_view.dart';
+import 'widgets/adopted_header.dart';
+import 'widgets/adopted_grid_view.dart';
 
-/// Favorites screen - Shows favorite pets in grid
-class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({super.key});
+/// Adopted screen - Shows adopted pets in grid
+class AdoptedScreen extends StatefulWidget {
+  const AdoptedScreen({super.key});
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<AdoptedScreen> createState() => _AdoptedScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _AdoptedScreenState extends State<AdoptedScreen> {
   String _selectedCategory = AppConstants.categoryAll;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PetCubit>().loadFavorites();
+      context.read<PetCubit>().loadAdoptedPets();
     });
   }
 
@@ -34,13 +34,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const FavoriteHeader(),
+            const AdoptedHeader(),
             _buildCategories(),
-            const Expanded(child: FavoritesGridView()),
+            const Expanded(child: AdoptedGridView()),
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(currentIndex: 1),
+      bottomNavigationBar: const BottomNavBar(currentIndex: 2),
     );
   }
 

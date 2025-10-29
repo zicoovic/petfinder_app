@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../core/entities/pet.dart';
-import '../../core/theme/app_colors.dart';
 import 'widgets/details_header.dart';
 import 'widgets/pet_image.dart';
 import 'widgets/pet_info_card.dart';
@@ -15,7 +14,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryLight,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       body: SafeArea(
         child: Column(
           children: [

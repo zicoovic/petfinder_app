@@ -21,83 +21,90 @@ class PetCardGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Pet Image
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                child: _buildImage(),
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Pet Image
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                  child: _buildImage(context),
+                ),
               ),
-            ),
-            // Pet Info
-            Padding(
-              padding: EdgeInsets.all(12.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          pet.name,
-                          style: AppTextStyles.petName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+              // Pet Info
+              Padding(
+                padding: EdgeInsets.all(12.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            pet.name,
+                            style: AppTextStyles.petName(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: onFavoriteTap,
-                        child: Icon(
-                          pet.isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: AppColors.primary,
-                          size: 24.sp,
+                        GestureDetector(
+                          onTap: onFavoriteTap,
+                          child: Icon(
+                            pet.isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: AppColors.primary,
+                            size: 24.sp,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: AppColors.error,
-                        size: 14.sp,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '${pet.distance} km away',
-                        style: AppTextStyles.distance,
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: AppColors.error,
+                          size: 14.sp,
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          '${pet.distance} km away',
+                          style: AppTextStyles.distance(context),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     final imageUrl = pet.imageUrl != null
         ? '${AppConstants.baseImageUrl}${pet.imageUrl}.jpg'
         : null;
 
     if (imageUrl == null) {
       return Container(
-        color: AppColors.cardBackground,
-        child: const Center(child: Icon(Icons.pets)),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        child: Center(
+          child: Icon(
+            Icons.pets,
+            color: Theme.of(context).iconTheme.color?.withAlpha((255 * 0.5).toInt()),
+          ),
+        ),
       );
     }
 
@@ -106,12 +113,17 @@ class PetCardGrid extends StatelessWidget {
       fit: BoxFit.cover,
       width: double.infinity,
       placeholder: (context, url) => Container(
-        color: AppColors.cardBackground,
-        child: const Center(child: CircularProgressIndicator()),
+        color: Theme.of(context).cardColor,
+        child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
       ),
       errorWidget: (context, url, error) => Container(
-        color: AppColors.cardBackground,
-        child: const Center(child: Icon(Icons.pets)),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        child: Center(
+          child: Icon(
+            Icons.pets,
+            color: Theme.of(context).iconTheme.color?.withAlpha((255 * 0.5).toInt()),
+          ),
+        ),
       ),
     );
   }

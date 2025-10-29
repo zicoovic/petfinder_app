@@ -18,6 +18,7 @@ class Pet extends Equatable {
   final String? gender;
   final String? age;
   final bool isFavorite;
+  final bool isAdopted;
 
   const Pet({
     required this.id,
@@ -33,6 +34,7 @@ class Pet extends Equatable {
     this.gender,
     this.age,
     this.isFavorite = false,
+    this.isAdopted = false,
   });
 
   /// Create a copy with modified fields
@@ -50,6 +52,7 @@ class Pet extends Equatable {
     String? gender,
     String? age,
     bool? isFavorite,
+    bool? isAdopted,
   }) {
     return Pet(
       id: id ?? this.id,
@@ -65,23 +68,25 @@ class Pet extends Equatable {
       gender: gender ?? this.gender,
       age: age ?? this.age,
       isFavorite: isFavorite ?? this.isFavorite,
+      isAdopted: isAdopted ?? this.isAdopted,
     );
   }
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        temperament,
-        origin,
-        lifeSpan,
-        weight,
-        imageUrl,
-        price,
-        distance,
-        gender,
-        age,
-        isFavorite,
-      ];
+    id,
+    name,
+    description,
+    temperament,
+    origin,
+    lifeSpan,
+    weight,
+    imageUrl,
+    price,
+    distance,
+    gender,
+    age,
+    isFavorite,
+    isAdopted,
+  ];
 }

@@ -20,6 +20,7 @@ PetModel _$PetModelFromJson(Map<String, dynamic> json) => PetModel(
   gender: json['gender'] as String? ?? 'Male',
   age: json['age'] as String? ?? '1 Year',
   isFavorite: json['isFavorite'] as bool? ?? false,
+  isAdopted: json['isAdopted'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$PetModelToJson(PetModel instance) => <String, dynamic>{
@@ -36,4 +37,5 @@ Map<String, dynamic> _$PetModelToJson(PetModel instance) => <String, dynamic>{
   'gender': instance.gender,
   'age': instance.age,
   'isFavorite': instance.isFavorite,
+  'isAdopted': instance.isAdopted,
 };
